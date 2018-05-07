@@ -12,19 +12,52 @@ class ToDo extends React.Component {
             { name: 'umyc okna', uid: 'ksjdansx' },
             { name: 'umyć naczynia', uid: 'kmadhksx' }
 
-        ]
+        ],
+        newTaskName: ''
+
+    }
+
+    onNewTaskChange = (event, newValue) => this.setState({
+        newTaskName: newValue
+    })
+
+    addTask = () => {
+        if (!this.state.newTaskName) return 
+            const newTask = {
+                name: this.state.newTaskName,
+                uid: Date.now()
+            }
+
+        const newTasks = this.state.tasks.concat(newTask)
+
+        this.setState({
+            tasks: newTasks,
+            newTaskName: ''
+        })
+    }
+
+    deleteTask = (taskUid) => {
+        const newTasks = this.state.tasks.filter(task => taskUid !== task.uid)
+
+        this.setState({
+            tasks: newTasks
+        })
     }
 
     render() {
         return (
-            <div> 
+            <div>
                 <Container>
-                    <Form />
+                    <Form
+                        onNewTaskChangeProp={this.onNewTaskChange}
+                        newTaskNameProp={this.state.newTaskName}
+                        addTaskProp={this.addTask}
+                    />
                 </Container>
                 <Container>
                     <List
-                        tasksProp = {this.state.tasks}
-                        deleteTaskProp={(uid)=>alert(uid)}
+                        tasksProp={this.state.tasks}
+                        deleteTaskProp={this.deleteTask}
                     />
                 </Container>
             </div>
